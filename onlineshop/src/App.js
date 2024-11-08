@@ -2,7 +2,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import React from "react";
 import Items from "./components/Items";
-
+import ShowFullItem from "./components/ShowFullItem";
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -50,18 +50,29 @@ class App extends React.Component {
           price: '99.49$'
         },
       ],
+      ShowFullItem: false,
+      FullItem: {}
     }
+    this.state.currentItems = this.state.items
     this.addToOrder = this.addToOrder.bind(this)
     this.deleteOrder = this.deleteOrder.bind(this)
+    this.onShowItem = this.onShowItem.bind(this)
   }
   render() {
   return (
     <div className="wrapper">
       <Header orders = {this.state.orders} onDelete = {this.deleteOrder} />
-      <Items items = {this.state.items} onAdd = {this.addToOrder}/>
+      <Items onShowItem = {this.onShowItem} items = {this.state.currentItems} onAdd = {this.addToOrder} />
+
+      {this.state.showFullItem && <ShowFullItem onAdd = {this.addToOrder} onShowItem = {this.onShowItem} item = {this.state.FullItem} />}
       <Footer />
     </div> 
   );
+}
+
+onShowItem(item) {
+  this.setState({FullItem: item})
+  this.setState({showFullItem: !this.state.showFullItem})
 }
 
 deleteOrder(id) {
